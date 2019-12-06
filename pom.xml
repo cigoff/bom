@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.ihg.spa</groupId>
+	<artifactId>find-hotels</artifactId>
+	<version>8.2.0</version>
+	<packaging>war</packaging>
+
+	<name>spa-find-hotels</name>
+	<description>SPA Find-Hotels</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.4.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<jetty.version>9.3.7.v20160115</jetty.version>
+		<alpn-version>8.1.7.v20160121</alpn-version>
+		<festVersion>2.0M8</festVersion>
+		<webpack.env>prod</webpack.env>
+		<ng.workingDirectory>src/main/ng</ng.workingDirectory>
+		<node.version>v8.11.2</node.version>
+		<npm.version>5.6.0</npm.version>
+	</properties>
+
+	<dependencies>
+	
+		<!--<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>-->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-undertow</artifactId>		
+		</dependency>
+
+		<dependency>
+			<groupId>org.mortbay.jetty.alpn</groupId>
+			<artifactId>alpn-boot</artifactId>
+			<version>${alpn-version}</version>			
+		</dependency>
+
+		<dependency>
+			<groupId>com.squareup.okhttp</groupId>
+			<artifactId>okhttp</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>			
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.5</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>			
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>4.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-hystrix</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.easytesting</groupId>
+			<artifactId>fest-assert-core</artifactId>
+			<version>${festVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.6.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>1.6.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.janino</groupId>
+			<artifactId>janino</artifactId>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Brixton.SR5</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+		<!-- Sasi added cyclone-dx and it uses default configuration -->
+			<plugin>
+			<groupId>org.cyclonedx</groupId>
+			<artifactId>cyclonedx-maven-plugin</artifactId>
+			<version>1.5.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<jvmArguments>
+						-Xbootclasspath/p:${settings.localRepository}/org/mortbay/jetty/alpn/alpn-boot/${alpn-version}/alpn-boot-${alpn-version}.jar
+					</jvmArguments>
+					<executable>true</executable>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>Front-end Tooling - Install, Build &amp; Test</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>${node.version}</nodeVersion>
+							<npmVersion>${npm.version}</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>Front-end Tooling - Install: npm</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>Front-end Tooling - Build: Grunt</id>
+						<goals>
+							<goal>grunt</goal>
+						</goals>
+						<configuration>
+							<arguments>build --force</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>Front-end Tooling - Build: Webpack</id>
+						<goals>
+							<goal>webpack</goal>
+						</goals>
+						<configuration>
+							<arguments>--env.${webpack.env}</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>Front-end Tooling - Test: Karma</id>
+						<goals>
+							<goal>karma</goal>
+						</goals>
+						<configuration>
+							<karmaConfPath>karma.conf.js</karmaConfPath>
+							<arguments>--env.unittest --env.coverage</arguments>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>Front-end Tooling - Install and Build  NG App</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>${node.version}</nodeVersion>
+							<npmVersion>${npm.version}</npmVersion>
+							<workingDirectory>${ng.workingDirectory}</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>Front-end Tooling - Install: npm NG App</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+							<workingDirectory>${ng.workingDirectory}</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>Front-end Tooling - Build: Webpack NG App</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>run webpack:prod</arguments>
+							<workingDirectory>${ng.workingDirectory}</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>Front-end Tooling - Test: Karma NG App</id>
+						<goals>
+							<goal>karma</goal>
+						</goals>
+						<configuration>
+							<karmaConfPath>karma.conf.js</karmaConfPath>
+							<arguments>--env.unittest --env.coverage</arguments>
+							<workingDirectory>${ng.workingDirectory}</workingDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
